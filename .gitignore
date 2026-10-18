@@ -1,0 +1,34 @@
+# Поддомены
+www/
+de/
+en/
+ru/
+rd/
+
+# Промежуточные папки
+burime/
+htdocs/
+releases/
+system/
+scripts/
+qqq/
+
+# Фронтенд
+front_admin/
+front_auth/
+front_src/
+
+# IDE
+.vscode/
+
+# Composer (не vendor)
+vendor/
+node_modules/
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.swp
+*.sql
+*.zip
+*.bak
