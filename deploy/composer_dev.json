@@ -1,0 +1,33 @@
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/JackRabbit911/framework"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/JackRabbit911/simple-route"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/JackRabbit911/validation"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/JackRabbit911/session"
+        }
+    ],
+    "require": {
+        "alpha-zeta/framework": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11",
+        "mockery/mockery": "^1.6"
+    },
+    "config": {
+        "preferred-install": {
+            "alpha-zeta/*": "source",
+            "*": "dist"
+        }
+    }
+}

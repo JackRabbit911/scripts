@@ -12,6 +12,7 @@ releases/
 system/
 scripts/
 qqq/
+envs/
 
 # Фронтенд
 front_admin/
