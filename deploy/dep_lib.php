@@ -5,13 +5,16 @@ class Deploy
     private string $appRepo = "https://github.com/JackRabbit911/burime.git";
     private string $rootRepo = "https://github.com/JackRabbit911/root.git";
 
-    public function __construct(private string $docroot) {}
+    public function __construct(
+        private string $docroot,
+        private string $releaseFolder,
+        private array $subdomains) {}
 
-    public function prepare(array $subdomains, bool $pull)
+    public function prepare(bool $pull)
     {
         echo " -> Git clone/pull, create necessary folders...\n";
 
-        foreach ($subdomains as $subdomain) {
+        foreach ($this->subdomains as $subdomain) {
             chdir($this->docroot);
             $folder = "$this->docroot/$subdomain";
             $updateSymlink = false;
@@ -45,9 +48,9 @@ class Deploy
         }
     }
 
-    public function application(string $env, array $subdomains): void
+    public function application(): void
     {
-        $relationReleasesDir = "releases/application/$env";
+        $relationReleasesDir = "releases/application/$this->releaseFolder";
         $releaseDir = "$this->docroot/$relationReleasesDir";
         $timestamp = date('YmdHis');
         $newRelease = "$releaseDir/$timestamp";
@@ -72,7 +75,7 @@ class Deploy
 
         $this->cleanupReleases($releaseDir);
 
-        foreach ($subdomains as $subdomain) {
+        foreach ($this->subdomains as $subdomain) {
             chdir("$this->docroot/$subdomain");
             @unlink('application');
             symlink("../$relationReleasesDir/$timestamp", 'application');
@@ -83,9 +86,9 @@ class Deploy
         echo " -> Application обновлён. Релиз: $timestamp\n";
     }
 
-    public function vendor(string $env, array $subdimains): void
+    public function vendor(): void
     {
-        switch ($env) {
+        switch ($this->releaseFolder) {
             case 'production':
                 $composerJson = 'composer.json';
                 $composerLock = 'composer.lock';
@@ -97,7 +100,7 @@ class Deploy
                 $noDev = '';
         }
 
-        $relationReleasesDir = "releases/system/$env";
+        $relationReleasesDir = "releases/system/$this->releaseFolder";
         $releaseDir = "$this->docroot/$relationReleasesDir";
         $scriptDir = "$this->docroot/deploy";
         $timestamp = date('YmdHis');
@@ -150,7 +153,7 @@ class Deploy
             die(" -> [Ошибка] Composer завершил работу с ошибкой: $resultCode\n");
         }
 
-        foreach ($subdimains as $subdomain) {
+        foreach ($this->subdomains as $subdomain) {
             chdir("$this->docroot/$subdomain");
             @unlink('vendor');
             symlink("../$relationReleasesDir/$timestamp/vendor", 'vendor');
@@ -225,4 +228,9 @@ class Deploy
 
         chdir($docroot);
     }
+}
+
+function getDeployClass(string $docroot, string $releaseFolder, array $subdomains)
+{
+    return new Deploy($docroot, $releaseFolder, $subdomains);
 }
