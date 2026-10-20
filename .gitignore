@@ -21,6 +21,7 @@ front_src/
 
 # IDE
 .vscode/
+*.code-workspace
 
 # Composer (не vendor)
 vendor/
