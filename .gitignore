@@ -15,6 +15,7 @@ qqq/
 envs/
 
 # Фронтенд
+front/
 front_admin/
 front_auth/
 front_src/
